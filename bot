@@ -1,0 +1,36 @@
+const TelegramBot = require('node-telegram-bot-api');
+
+const token = '8337910224:AAEa23tFAUcA5xsJof8FfmAz-DRJGi32ToM';
+const bot = new TelegramBot(token, { polling: true });
+
+console.log('🤖 Русский бот запущен на Railway!');
+
+// Команда /start
+bot.onText(/\/start/, (msg) => {
+  const userName = msg.from.first_name;
+  bot.sendMessage(msg.chat.id, `👋 Привет, ${userName}!\n\n🤖 Я русский Telegram бот!\n✅ Работаю на Railway\n💬 Напиши что-нибудь!`);
+});
+
+// Команда /ping
+bot.onText(/\/ping/, (msg) => {
+  bot.sendMessage(msg.chat.id, '🏓 Понг! Бот работает отлично!');
+});
+
+// Команда /info
+bot.onText(/\/info/, (msg) => {
+  bot.sendMessage(msg.chat.id, `📊 Информация:\n\n🤖 Бот: ASPGroupTest\n🔧 Режим: Long Polling\n🌐 Хостинг: Railway\n💬 Язык: Русский\n✅ Статус: Активен`);
+});
+
+// Обработка обычных сообщений
+bot.on('message', (msg) => {
+  if (!msg.text.startsWith('/') && !msg.from.is_bot) {
+    bot.sendMessage(msg.chat.id, `📝 Вы написали: "${msg.text}"`);
+  }
+});
+
+// Обработка ошибок
+bot.on('polling_error', (error) => {
+  console.log('🔧 Автоматическое восстановление...', error.message);
+});
+
+console.log('✅ Бот готов к работе! Отправьте /start в Telegram');
